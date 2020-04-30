@@ -1,3 +1,3 @@
-module github.com/devkokov/health-check
+module github.com/devkokov/gohealthcheck
 
 go 1.14
