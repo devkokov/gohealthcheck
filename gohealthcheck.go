@@ -7,18 +7,35 @@ import (
 	"os"
 )
 
-func Register(addr string) {
-	hc := flag.Bool("hc", false, "perform a health check")
-	flag.Parse()
-	if !*hc {
+type healthCheck struct {
+	logger *log.Logger
+	exit   func(code int)
+	run    bool
+}
+
+func (hc *healthCheck) register(addr string) {
+	if !hc.run {
 		return
 	}
-	l := log.New(os.Stdout, "health-check ", log.LstdFlags)
 	resp, err := http.Get(addr)
 	if err != nil || resp.StatusCode != 200 {
-		l.Println("FAIL")
-		os.Exit(1)
+		hc.logger.Println("FAIL")
+		hc.exit(1)
 	}
-	l.Println("OK")
-	os.Exit(0)
+	hc.logger.Println("OK")
+	hc.exit(0)
+}
+
+func defaultHc() *healthCheck {
+	f := flag.Bool("hc", false, "perform a health check")
+	flag.Parse()
+	return &healthCheck{
+		logger: log.New(os.Stdout, "health-check ", log.LstdFlags),
+		exit:   os.Exit,
+		run:    *f,
+	}
+}
+
+func Register(addr string) {
+	defaultHc().register(addr)
 }

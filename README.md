@@ -1,16 +1,18 @@
 # gohealthcheck
 
-Module that adds a health-checker to your Go app.
+Module that adds a health-check utility to your Go app.
+
+Inspired by https://medium.com/google-cloud/dockerfile-go-healthchecks-k8s-9a87d5c5b4cb
 
 ### Usage
 
-Install the dependency
+Install as dependency
 
 ```
 go get github.com/devkokov/gohealthcheck
 ```
 
-Register the health-checker at the top of your main() function
+Register a health-check address at the top of your main() function
 
 ```go
 package main
@@ -26,7 +28,7 @@ func main() {
 }
 ```
 
-Run the health checker by adding a `-hc` flag to your executable
+Run the health-check by adding a `-hc` flag to your executable
 
 ```
 ./your-go-build -hc
